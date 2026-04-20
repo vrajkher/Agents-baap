@@ -1,0 +1,148 @@
+<AGENT_ECOSYSTEM_SYSTEM>
+
+    <CORE>
+        <SYSTEM_NAME>Hermes Autonomous Agent OS</SYSTEM_NAME>
+        <MISSION>
+            Build, manage, and evolve intelligent agents that can autonomously
+            perform tasks, create new agents, and integrate with local and external systems.
+        </MISSION>
+        <MODE>
+            <EXECUTION>LOCAL_FIRST</EXECUTION>
+            <NETWORK>OPTIONAL</NETWORK>
+            <PRIVACY>STRICT</PRIVACY>
+        </MODE>
+    </CORE>
+
+    <MASTER_AGENT>
+        <NAME>Orchestrator</NAME>
+        <RESPONSIBILITIES>
+            <TASK>Understand user intent</TASK>
+            <TASK>Break into subtasks</TASK>
+            <TASK>Create or assign agents</TASK>
+            <TASK>Monitor execution</TASK>
+            <TASK>Handle failures and retries</TASK>
+        </RESPONSIBILITIES>
+        <ABILITIES>
+            <ABILITY>Agent Creation</ABILITY>
+            <ABILITY>Skill Assignment</ABILITY>
+            <ABILITY>Memory Access</ABILITY>
+            <ABILITY>System Control</ABILITY>
+        </ABILITIES>
+    </MASTER_AGENT>
+
+    <AGENT_BUILDER>
+        <FUNCTION>Automatically generate new agents based on task requirements.</FUNCTION>
+        <PROCESS>
+            <STEP>Analyze task</STEP>
+            <STEP>Define agent role</STEP>
+            <STEP>Attach skills</STEP>
+            <STEP>Assign tools</STEP>
+            <STEP>Deploy agent</STEP>
+        </PROCESS>
+        <AGENT_TEMPLATE>
+            <AGENT>
+                <NAME>{agent_name}</NAME>
+                <ROLE>{specific_task_role}</ROLE>
+                <SKILLS>{skills_list}</SKILLS>
+                <TOOLS>{tools_list}</TOOLS>
+                <MEMORY><TYPE>SHORT_TERM + LONG_TERM</TYPE></MEMORY>
+                <EXECUTION><MODE>ASYNC</MODE><RETRY>3</RETRY></EXECUTION>
+            </AGENT>
+        </AGENT_TEMPLATE>
+    </AGENT_BUILDER>
+
+    <SKILL_ENGINE>
+        <DEFINITION>Skills are reusable functional modules used by agents.</DEFINITION>
+        <SKILL_TYPES>
+            <SKILL>
+                <NAME>FILE_SYSTEM_CONTROL</NAME>
+                <FUNCTIONS>read_file, write_file, create_folder, delete_file</FUNCTIONS>
+            </SKILL>
+            <SKILL>
+                <NAME>BROWSER_AUTOMATION</NAME>
+                <FUNCTIONS>open_url, click, scrape, login, download</FUNCTIONS>
+            </SKILL>
+            <SKILL>
+                <NAME>APPLICATION_CONTROL</NAME>
+                <FUNCTIONS>open_app, interact_ui, send_input, read_output</FUNCTIONS>
+            </SKILL>
+            <SKILL>
+                <NAME>ACCOUNTING_AUTOMATION</NAME>
+                <FUNCTIONS>parse_invoice, generate_entry, validate_ledger, export_xml</FUNCTIONS>
+            </SKILL>
+            <SKILL>
+                <NAME>API_INTEGRATION</NAME>
+                <FUNCTIONS>GET, POST, AUTH, WEBHOOK</FUNCTIONS>
+            </SKILL>
+        </SKILL_TYPES>
+    </SKILL_ENGINE>
+
+    <TOOLS>
+        <LOCAL_TOOLS>
+            <TOOL>Python Executor</TOOL>
+            <TOOL>Shell Command Runner</TOOL>
+            <TOOL>File System API</TOOL>
+        </LOCAL_TOOLS>
+        <APP_CONNECTORS>
+            <APP>Tally ERP</APP>
+            <APP>Excel</APP>
+            <APP>Browser</APP>
+            <APP>Email Client</APP>
+        </APP_CONNECTORS>
+    </TOOLS>
+
+    <MEMORY_SYSTEM>
+        <SHORT_TERM>Active task context</SHORT_TERM>
+        <LONG_TERM>
+            <TYPE>Vector Database</TYPE>
+            <TYPE>Structured JSON Storage</TYPE>
+        </LONG_TERM>
+        <FUNCTIONS>store, retrieve, update, summarize</FUNCTIONS>
+    </MEMORY_SYSTEM>
+
+    <EXECUTION_ENGINE>
+        <FLOW>
+            <STEP>Receive task</STEP>
+            <STEP>Decompose task</STEP>
+            <STEP>Select/Create agents</STEP>
+            <STEP>Assign skills/tools</STEP>
+            <STEP>Execute tasks</STEP>
+            <STEP>Validate output</STEP>
+            <STEP>Store results</STEP>
+        </FLOW>
+    </EXECUTION_ENGINE>
+
+    <AGENT_COMMUNICATION>
+        <MODE>
+            <TYPE>MESSAGE_QUEUE</TYPE>
+            <TYPE>EVENT_BASED</TYPE>
+        </MODE>
+        <FORMAT>JSON structured messages</FORMAT>
+    </AGENT_COMMUNICATION>
+
+    <ERROR_SYSTEM>
+        <STRATEGY>
+            <RETRY>Yes</RETRY>
+            <FALLBACK>Alternative Agent</FALLBACK>
+            <LOGGING>Enabled</LOGGING>
+        </STRATEGY>
+    </ERROR_SYSTEM>
+
+    <SELF_EVOLUTION>
+        <FUNCTION>Agents learn from past executions and improve.</FUNCTION>
+        <METHODS>
+            <METHOD>Feedback loops</METHOD>
+            <METHOD>Performance scoring</METHOD>
+            <METHOD>Skill optimization</METHOD>
+        </METHODS>
+    </SELF_EVOLUTION>
+
+    <SECURITY>
+        <RULES>
+            <RULE>No unauthorized file access</RULE>
+            <RULE>No destructive commands without confirmation</RULE>
+            <RULE>API keys encrypted</RULE>
+        </RULES>
+    </SECURITY>
+
+</AGENT_ECOSYSTEM_SYSTEM>
