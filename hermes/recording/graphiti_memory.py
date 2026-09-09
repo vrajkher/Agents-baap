@@ -9,7 +9,7 @@ from typing import Any
 
 
 class GraphitiWorkMemory:
-    """Store completed AI work records as Graphiti episodes.
+    """Store completed AI work records and OpenAI traces as Graphiti episodes.
 
     SQLite remains the exact local audit log. Graphiti is used for semantic,
     temporal and relationship memory across runs.
@@ -63,26 +63,65 @@ class GraphitiWorkMemory:
             "tags": record.get("tags", []),
         }
 
-    async def add_work_record(self, record: dict[str, Any]) -> None:
-        """Add one completed work record as a structured Graphiti episode."""
+    async def _add_json_episode(
+        self,
+        *,
+        name: str,
+        payload: dict[str, Any],
+        source_description: str,
+        reference_time: datetime | None = None,
+    ) -> None:
         from graphiti_core.nodes import EpisodeType
 
+        reference_time = reference_time or datetime.now(timezone.utc)
+        if reference_time.tzinfo is None:
+            reference_time = reference_time.replace(tzinfo=timezone.utc)
+
+        await self.graphiti.add_episode(
+            name=name,
+            episode_body=json.dumps(payload, ensure_ascii=False, default=str),
+            source=EpisodeType.json,
+            source_description=source_description,
+            reference_time=reference_time,
+        )
+
+    async def add_work_record(self, record: dict[str, Any]) -> None:
+        """Add one completed work record as a structured Graphiti episode."""
         created = record.get("created_at")
         try:
             reference_time = datetime.fromisoformat(created) if created else datetime.now(timezone.utc)
         except ValueError:
             reference_time = datetime.now(timezone.utc)
-        if reference_time.tzinfo is None:
-            reference_time = reference_time.replace(tzinfo=timezone.utc)
 
         payload = self._episode_payload(record)
         run_id = record.get("run_id", "unknown")
         goal = record.get("goal", "AI work record")
-        await self.graphiti.add_episode(
+        await self._add_json_episode(
             name=f"AI Work Record {run_id}: {goal}",
-            episode_body=json.dumps(payload, ensure_ascii=False, default=str),
-            source=EpisodeType.json,
+            payload=payload,
             source_description="Observable AI working record from Hermes WorkRecorder",
+            reference_time=reference_time,
+        )
+
+    async def add_openai_trace(self, trace_episode: dict[str, Any]) -> None:
+        """Add a completed automatic OpenAI Agents SDK trace to Graphiti.
+
+        The trace episode should come from ``OpenAITraceStore.to_graphiti_episode``.
+        It contains observable spans such as model generations, tool calls,
+        handoffs, guardrails, custom spans, errors and timing.
+        """
+        started = trace_episode.get("started_at")
+        try:
+            reference_time = datetime.fromisoformat(started) if started else datetime.now(timezone.utc)
+        except (ValueError, TypeError):
+            reference_time = datetime.now(timezone.utc)
+
+        trace_id = trace_episode.get("trace_id", "unknown")
+        workflow = trace_episode.get("workflow_name") or "OpenAI agent workflow"
+        await self._add_json_episode(
+            name=f"OpenAI Work Trace {trace_id}: {workflow}",
+            payload=trace_episode,
+            source_description="Observable OpenAI Agents SDK trace captured locally by Hermes",
             reference_time=reference_time,
         )
 
